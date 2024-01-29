@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
- * @author <a href="https://github.com/youngccy">YounGCY</a>
+ * @author <a href="https://github.com/yngcy">YounGCY</a>
  * @description
  */
 @Command(name = "list", description = "查看文件列表", mixinStandardHelpOptions = true)

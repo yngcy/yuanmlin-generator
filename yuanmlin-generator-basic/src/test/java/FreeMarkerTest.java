@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 /**
- * @author <a href="https://github.com/youngccy">YounGCY</a>
+ * @author <a href="https://github.com/yngcy">YounGCY</a>
  * @description
  */
 public class FreeMarkerTest {

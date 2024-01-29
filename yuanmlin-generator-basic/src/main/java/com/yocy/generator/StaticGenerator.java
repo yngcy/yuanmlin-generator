@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 /**
- * @author <a href="https://github.com/youngccy">YounGCY</a>
+ * @author <a href="https://github.com/yngcy">YounGCY</a>
  * @description
  */
 public class StaticGenerator {

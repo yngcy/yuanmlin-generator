@@ -11,7 +11,7 @@ import picocli.CommandLine.Option;
 import java.util.concurrent.Callable;
 
 /**
- * @author <a href="https://github.com/youngccy">YounGCY</a>
+ * @author <a href="https://github.com/yngcy">YounGCY</a>
  * @description
  */
 @Command(name = "generate", description = "生成代码", mixinStandardHelpOptions = true)

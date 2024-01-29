@@ -1,4 +1,4 @@
-package com.yocy.model;
+package com.yocy.maker.model;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import lombok.Data;
  * @description
  */
 @Data
-public class MainTemplateConfig {
+public class DataModel {
 
     /**
      * 是否循环

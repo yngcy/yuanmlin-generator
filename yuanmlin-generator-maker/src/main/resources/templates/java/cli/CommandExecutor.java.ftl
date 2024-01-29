@@ -1,18 +1,18 @@
-package com.yocy.cli;
+package ${basePackage}.cli;
 
-import com.yocy.cli.command.ConfigCommand;
-import com.yocy.cli.command.GenerateCommand;
-import com.yocy.cli.command.ListCommand;
+import ${basePackage}.cli.command.ConfigCommand;
+import ${basePackage}.cli.command.GenerateCommand;
+import ${basePackage}.cli.command.ListCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 /**
- * @author <a href="https://github.com/yngcy">YounGCY</a>
- * @description
- */
-@Command(name = "yuanmlin", mixinStandardHelpOptions = true)
+* @author ${author}
+* @description
+*/
+@Command(name = "${name}", mixinStandardHelpOptions = true)
 public class CommandExecutor implements Runnable{
-    
+
     private final CommandLine commandLine;
 
     {
@@ -29,10 +29,10 @@ public class CommandExecutor implements Runnable{
     }
 
     /**
-     * 执行命令
-     * @param args
-     * @return
-     */
+      * 执行命令
+      * @param args
+      * @return
+      */
     public Integer doExecute(String[] args) {
         return commandLine.execute(args);
     }

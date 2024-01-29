@@ -1,11 +1,11 @@
-package com.yocy;
+package ${basePackage};
 
-import com.yocy.cli.CommandExecutor;
+import ${basePackage}.cli.CommandExecutor;
 
 /**
- * @author <a href="https://github.com/yngcy">YounGCY</a>
- * @description
- */
+* @author ${author}
+* @description
+*/
 public class Main {
     public static void main(String[] args) {
         CommandExecutor commandExecutor = new CommandExecutor();

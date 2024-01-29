@@ -4,7 +4,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 /**
- * @author <a href="https://github.com/youngccy">YounGCY</a>
+ * @author <a href="https://github.com/yngcy">YounGCY</a>
  * @description
  */
 @Command(name = "main", mixinStandardHelpOptions = true)
