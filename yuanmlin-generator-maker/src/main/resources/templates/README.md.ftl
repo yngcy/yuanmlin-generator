@@ -19,12 +19,14 @@ generator <命令> <参数选项>
 示例命令：
 
 ```bash
-generator generate <#list modelConfig.models as modelInfo>-${modelInfo.abbr} </#list>
+generator generate <#list modelConfig.models as modelInfo><#if modelInfo.groupKey??><#else>--${modelInfo.fieldName}<#if modelInfo.defaultValue??>=${modelInfo.defaultValue?c} </#if></#if></#list>
 ```
 
 ## 参数说明
 
 <#list modelConfig.models as modelInfo>
+<#if modelInfo.groupKey??>
+<#else>
 ${modelInfo?index + 1}） ${modelInfo.fieldName}
 
 类型：${modelInfo.type}
@@ -33,7 +35,7 @@ ${modelInfo?index + 1}） ${modelInfo.fieldName}
 
 默认值：${modelInfo.defaultValue?c}
 
-缩写：-${modelInfo.abbr}
+缩写：-${modelInfo.abbr!""}
 
-
+</#if>
 </#list>

@@ -25,6 +25,7 @@ public class MainGenerator extends GenerateTemplate {
         System.out.println("需要充VIPPPP才能生成dist...");
     }
 
+    @Deprecated
     public static void main(String[] args) throws TemplateException, IOException, InterruptedException {
         Meta meta = MetaManager.getMetaObject();
         System.out.println(meta);

@@ -11,17 +11,31 @@ import lombok.Data;
 public class DataModel {
 
     /**
+     * 是否生成 .gitignore 文件
+     */
+    public boolean needGit = false;
+
+    /**
      * 是否循环
      */
-    private boolean loop;
+    public boolean loop;
 
     /**
-     * 作者注释
+     * 核心模板
      */
-    private String author = "YounGCY";
+    public MainTemplate mainTemplate;
+    
+    @Data
+    public static class MainTemplate {
+        /**
+         * 作者注释
+         */
+        public String author = "youngcy";
 
-    /**
-     * 输出文本
-     */
-    private String outputText = "sum = ";
+        /**
+         * 输出信息
+         */
+        public String outoutText = "sum = ";
+    }
+    
 }

@@ -37,8 +37,8 @@ public class FileGenerator {
     public static void main(String[] args) throws TemplateException, IOException {
         DataModel mainTemplateConfig = new DataModel();
         mainTemplateConfig.setLoop(false);
-        mainTemplateConfig.setAuthor("YounGCY");
-        mainTemplateConfig.setOutputText("SUM = ");
+//        mainTemplateConfig.setAuthor("YounGCY");
+//        mainTemplateConfig.setOutputText("SUM = ");
         doGenerate(mainTemplateConfig);
     }
 }
