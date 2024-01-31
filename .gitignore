@@ -3,6 +3,7 @@
 .idea
 target
 yuanmlin-generator.iml
+**/*generated/**
 
 
 ### JetBrains template
