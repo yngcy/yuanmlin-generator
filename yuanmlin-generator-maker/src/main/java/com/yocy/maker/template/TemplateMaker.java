@@ -75,8 +75,9 @@ public class TemplateMaker {
 
         // 文件配置信息
         Meta.FileConfig.FileInfo fileInfo = new Meta.FileConfig.FileInfo();
-        fileInfo.setInputPath(fileInputPath);
-        fileInfo.setOutputPath(fileOutputPath);
+        // 注意文件输入路径和输出路径反转
+        fileInfo.setInputPath(fileOutputPath);
+        fileInfo.setOutputPath(fileInputPath);
         fileInfo.setType(FileTypeEnum.FILE.getValue());
         fileInfo.setGenerateType(FileGenerateTypeEnum.DYNAMIC.getValue());
 
@@ -85,8 +86,8 @@ public class TemplateMaker {
         // 之前不存在模板文件，并且没有更改过内容，则为静态生成
         if (!hasTemplateFile) {
             if (!contentChanged) {
-                // 输出路径 = 输入路径
-                fileInfo.setOutputPath(fileInputPath);
+                // 输入路径没有 FTL 后缀
+                fileInfo.setInputPath(fileInputPath);
                 fileInfo.setGenerateType(FileGenerateTypeEnum.STATIC.getValue());
             } else {
                 // 没有模板文件，需要挖坑，生成动态文件
@@ -301,7 +302,7 @@ public class TemplateMaker {
 
     /**
      * 文件去重，采用同分组内文件合并，不同分组保留<br>
-     * 根据输入路径 (fileInfo.inputPath) 去重
+     * 根据输入路径 (fileInfo.outputPath) 去重
      *
      * @param fileInfoList 文件信息列表
      * @return 文件信息列表
@@ -325,7 +326,7 @@ public class TemplateMaker {
                     .stream()
                     .flatMap(fileInfo -> fileInfo.getFiles().stream())
                     .collect(
-                            Collectors.toMap(Meta.FileConfig.FileInfo::getInputPath, o -> o, (e, r) -> r)
+                            Collectors.toMap(Meta.FileConfig.FileInfo::getOutputPath, o -> o, (e, r) -> r)
                     ).values());
 
             // 使用新的 group 配置
@@ -346,7 +347,7 @@ public class TemplateMaker {
         resultList.addAll(new ArrayList<>(noGroupFileInfoList
                 .stream()
                 .collect(
-                        Collectors.toMap(Meta.FileConfig.FileInfo::getInputPath, o -> o, (e, r) -> r)).values()));
+                        Collectors.toMap(Meta.FileConfig.FileInfo::getOutputPath, o -> o, (e, r) -> r)).values()));
         return resultList;
     }
 }
