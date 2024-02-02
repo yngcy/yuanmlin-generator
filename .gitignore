@@ -1,9 +1,9 @@
 # My Custom
-
 .idea
 target
 yuanmlin-generator.iml
 **/*generated/**
+yuanmlin-generator-maker/.temp/
 
 
 ### JetBrains template

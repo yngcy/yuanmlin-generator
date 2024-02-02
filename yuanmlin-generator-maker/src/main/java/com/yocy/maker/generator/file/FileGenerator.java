@@ -34,6 +34,7 @@ public class FileGenerator {
         DynamicFileGenerator.doGenerate(inputDynamicFilePath, outputDynamicFilePath, model);
     }
 
+    @Deprecated
     public static void main(String[] args) throws TemplateException, IOException {
         DataModel mainTemplateConfig = new DataModel();
         mainTemplateConfig.setLoop(false);
