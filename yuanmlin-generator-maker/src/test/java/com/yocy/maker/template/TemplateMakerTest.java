@@ -81,4 +81,37 @@ public class TemplateMakerTest {
         long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1753407952884621312L);
         System.out.println(id);
     }
+
+    /**
+     * 测试文件生成路径
+     */
+    @Test
+    public void testMakeTemplateBug3() {
+        Meta meta = new Meta();
+        meta.setName("acm-template-generator");
+        meta.setDescription("ACM 示例模板代码生成器");
+
+        String projectPath = System.getProperty("user.dir");
+        String originProjectPath = new File(projectPath).getParent() + File.separator + "yuanmlin-generator-demo-projects/springboot-init";
+
+        // 文件参数配置
+        String inputFilePath = "./";
+        TemplateMakerFileConfig templateMakerFileConfig = new TemplateMakerFileConfig();
+        TemplateMakerFileConfig.FileInfoConfig fileInfoConfig1 = new TemplateMakerFileConfig.FileInfoConfig();
+        fileInfoConfig1.setPath(inputFilePath);
+        templateMakerFileConfig.setFiles(Arrays.asList(fileInfoConfig1));
+
+        // - 模型组配置
+        TemplateMakerModelConfig templateMakerModelConfig = new TemplateMakerModelConfig();
+        TemplateMakerModelConfig.ModelInfoConfig modelInfoConfig1 = new TemplateMakerModelConfig.ModelInfoConfig();
+        modelInfoConfig1.setFieldName("className");
+        modelInfoConfig1.setType("String");
+        modelInfoConfig1.setReplaceText("BaseResponse");
+        List<TemplateMakerModelConfig.ModelInfoConfig> modelInfoConfigList = Arrays.asList(modelInfoConfig1);
+        templateMakerModelConfig.setModels(modelInfoConfigList);
+
+
+        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1753409930209570816L);
+        System.out.println(id);
+    }
 }
