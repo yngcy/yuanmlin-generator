@@ -1,19 +1,13 @@
 package com.yocy.maker.template;
 
 import com.yocy.maker.meta.Meta;
-import com.yocy.maker.template.enums.FileFilterRangeEnum;
-import com.yocy.maker.template.enums.FileFilterRuleEnum;
-import com.yocy.maker.template.model.FileFilterConfig;
 import com.yocy.maker.template.model.TemplateMakerFileConfig;
 import com.yocy.maker.template.model.TemplateMakerModelConfig;
 import org.junit.Test;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 /**
  * @author <a href="https://github.com/ygncy">YounGCY</a>
@@ -84,7 +78,7 @@ public class TemplateMakerTest {
         templateMakerModelConfig.setModels(modelInfoConfigList);
 
 
-        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1753393996224798720L);
+        long id = TemplateMaker.makeTemplate(meta, originProjectPath, templateMakerFileConfig, templateMakerModelConfig, 1753401664415035392L);
         System.out.println(id);
     }
 }
