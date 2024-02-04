@@ -1,4 +1,4 @@
-package com.yocy.maker;
+package com.yocy.maker.template;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
@@ -40,7 +40,7 @@ public class FileFilter {
             String value = fileFilterConfig.getValue();
 
             FileFilterRangeEnum fileFilterRangeEnum = FileFilterRangeEnum.getEnumByValue(range);
-            if (range == null) {
+            if (fileFilterRangeEnum == null) {
                 continue;
             }
             

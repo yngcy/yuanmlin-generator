@@ -65,7 +65,7 @@ public class MetaValidator {
     private static void validAndFillFileConfig(Meta meta) {
         // fileConfig 校验和默认值
         Meta.FileConfig fileConfig = meta.getFileConfig();
-        if (fileConfig != null) {
+        if (fileConfig == null) {
             return;
         }
         // sourceRootPath: 必填
@@ -138,7 +138,7 @@ public class MetaValidator {
         String name = StrUtil.blankToDefault(meta.getName(), "my-generator");
         String description = StrUtil.emptyToDefault(meta.getDescription(), "我的模板代码生成器");
         String author = StrUtil.emptyToDefault(meta.getAuthor(), "youngcy");
-        String basePackage = StrUtil.blankToDefault(meta.getBasePackage(), "com.youngcy");
+        String basePackage = StrUtil.blankToDefault(meta.getBasePackage(), "com.yocy");
         String version = StrUtil.emptyToDefault(meta.getVersion(), "1.0.0");
         String createTime = StrUtil.emptyToDefault(meta.getCreateTime(), DateUtil.now());
         
