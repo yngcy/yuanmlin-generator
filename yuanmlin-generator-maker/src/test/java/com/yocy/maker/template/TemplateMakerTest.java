@@ -29,7 +29,7 @@ public class TemplateMakerTest {
         meta.setDescription("ACM 示例模板代码生成器");
 
         String projectPath = System.getProperty("user.dir");
-        String originProjectPath = new File(projectPath).getParent() + File.separator + "yuanmlin-generator-demo-projects/springboot-init";
+        String originProjectPath = new File(projectPath).getParent() + File.separator + "yuanmlin-generator-demo-projects/yuanmlin-generator-web-backend";
         
         // 文件参数配置
         String inputFilePath1 = "src/main/resources/application.yml";
@@ -63,7 +63,7 @@ public class TemplateMakerTest {
         meta.setDescription("ACM 示例模板代码生成器");
 
         String projectPath = System.getProperty("user.dir");
-        String originProjectPath = new File(projectPath).getParent() + File.separator + "yuanmlin-generator-demo-projects/springboot-init";
+        String originProjectPath = new File(projectPath).getParent() + File.separator + "yuanmlin-generator-demo-projects/yuanmlin-generator-web-backend";
 
         // 文件参数配置
         String inputFilePath = "src/main/java/com/yupi/springbootinit/common";
@@ -96,7 +96,7 @@ public class TemplateMakerTest {
         meta.setDescription("ACM 示例模板代码生成器");
 
         String projectPath = System.getProperty("user.dir");
-        String originProjectPath = new File(projectPath).getParent() + File.separator + "yuanmlin-generator-demo-projects/springboot-init";
+        String originProjectPath = new File(projectPath).getParent() + File.separator + "yuanmlin-generator-demo-projects/yuanmlin-generator-web-backend";
 
         // 文件参数配置
         String inputFilePath = "./";
@@ -135,7 +135,7 @@ public class TemplateMakerTest {
      */
     @Test
     public void makeSpringBootTemplate() {
-        String rootPath = "examples/springboot-init/";
+        String rootPath = "examples/yuanmlin-generator-web-backend/";
         String configStr = ResourceUtil.readUtf8Str(rootPath + "templateMaker.json");
         TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(configStr, TemplateMakerConfig.class);
         long id = TemplateMaker.makeTemplate(templateMakerConfig);

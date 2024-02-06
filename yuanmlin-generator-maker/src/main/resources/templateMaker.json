@@ -3,7 +3,7 @@
     "name": "acm-template-pro-generator",
     "description": "ACM 示例模板生成器"
   },
-  "originProjectPath": "../../../yuanmlin-generator-demo-projects/springboot-init",
+  "originProjectPath": "../../../yuanmlin-generator-demo-projects/yuanmlin-generator-web-backend",
   "fileConfig": {
     "files": [
       {

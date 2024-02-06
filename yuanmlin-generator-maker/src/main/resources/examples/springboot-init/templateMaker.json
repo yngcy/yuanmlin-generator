@@ -1,8 +1,8 @@
 {
   "id": 1,
   "meta": {
-    "name": "springboot-init-generator",
+    "name": "yuanmlin-generator-web-backend-generator",
     "description": "Spring Boot 模板项目生成器"
   },
-  "originProjectPath": "../../../yuanmlin-generator-demo-projects/springboot-init"
+  "originProjectPath": "../../../yuanmlin-generator-demo-projects/yuanmlin-generator-web-backend"
 }

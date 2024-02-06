@@ -28,8 +28,8 @@
         "fieldName": "description",
         "type": "String",
         "description": "接口文档描述",
-        "defaultValue": "springboot-init",
-        "replaceText": "springboot-init"
+        "defaultValue": "yuanmlin-generator-web-backend",
+        "replaceText": "yuanmlin-generator-web-backend"
       },
       {
         "fieldName": "version",
