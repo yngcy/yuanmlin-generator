@@ -1,8 +1,8 @@
 {
-    "name": "yuanmlin-generator-web-backend-generator",
+    "name": "springboot-init",
     "description": "Spring Boot 模板项目生成器",
     "fileConfig": {
-        "sourceRootPath": "D:/java-workspace/yuanmlin-generator/yuanmlin-generator-maker/.temp/1/yuanmlin-generator-web-backend",
+        "sourceRootPath": "D:/java-workspace/yuanmlin-generator/yuanmlin-generator-maker/.temp/1/springboot-init",
         "files": [
             {
                 "type": "group",

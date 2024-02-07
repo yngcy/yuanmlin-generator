@@ -3,6 +3,7 @@ package com.yocy.maker.generator.main;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.ZipUtil;
 import com.yocy.maker.generator.JarGenerator;
 import com.yocy.maker.generator.ScriptGenerator;
 import com.yocy.maker.generator.file.DynamicFileGenerator;
@@ -42,7 +43,7 @@ public class GenerateTemplate {
         String shellOutputFilePath = buildScript(outputPath, jarPath);
         
         // 5、生成精简版的程序（产物包）
-        buildDist(outputPath, jarPath, shellOutputFilePath, sourceCopyDestPath);
+        buildDist(outputPath, sourceCopyDestPath, jarPath, shellOutputFilePath);
     }
 
     /**
@@ -70,6 +71,18 @@ public class GenerateTemplate {
         String jarName = String.format("%s-%s-jar-with-dependencies.jar", meta.getName(), meta.getVersion());
         String jarPath = "target/" + jarName;
         return jarPath;
+    }
+
+    /**
+     * 制作压缩包
+     * 
+     * @param outputPath
+     * @return 压缩包路径
+     */
+    protected String buildZip(String outputPath) {
+        String zipPath = outputPath + ".zip";
+        ZipUtil.zip(outputPath, zipPath);
+        return zipPath;
     }
 
     /**
@@ -169,7 +182,7 @@ public class GenerateTemplate {
      * @param shellOutputFilePath
      * @param sourceCopyDestPath
      */
-    protected void buildDist(String outputPath, String jarPath, String shellOutputFilePath, String sourceCopyDestPath) {
+    protected String buildDist(String outputPath, String sourceCopyDestPath, String jarPath, String shellOutputFilePath) {
         String distOutputPath = outputPath + "-dist";
         // 1.拷贝 jar 包
         String targetAbsolutePath = distOutputPath + File.separator + "target";
@@ -181,5 +194,6 @@ public class GenerateTemplate {
         FileUtil.copy(shellOutputFilePath + ".bat", distOutputPath, true);
         // 3.拷贝源模板文件
         FileUtil.copy(sourceCopyDestPath, distOutputPath, true);
+        return distOutputPath;
     }
 }

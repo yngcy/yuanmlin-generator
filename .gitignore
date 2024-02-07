@@ -4,6 +4,7 @@ target
 yuanmlin-generator.iml
 **/*generated/**
 yuanmlin-generator-maker/.temp/
+yuanmlin-generator-web-backend/src/main/resources/application-local.yml
 
 
 ### JetBrains template
