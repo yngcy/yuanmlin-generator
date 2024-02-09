@@ -3,7 +3,7 @@ package com.yocy.web.model.dto.generator;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.yocy.web.common.PageRequest;
-import com.yocy.web.meta.Meta;
+import com.yocy.maker.meta.Meta;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -7,6 +7,11 @@ interface Props {
   oldData: any;
 }
 
+/**
+ * 模型配置表单组件
+ * @param props
+ * @constructor
+ */
 const ModelConfigForm: React.FC<Props> = (props) => {
   const { formRef, oldData } = props;
 

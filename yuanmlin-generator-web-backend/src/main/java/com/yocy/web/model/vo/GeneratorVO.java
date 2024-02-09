@@ -1,7 +1,7 @@
 package com.yocy.web.model.vo;
 
 import cn.hutool.json.JSONUtil;
-import com.yocy.web.meta.Meta;
+import com.yocy.maker.meta.Meta;
 import com.yocy.web.model.entity.Generator;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;

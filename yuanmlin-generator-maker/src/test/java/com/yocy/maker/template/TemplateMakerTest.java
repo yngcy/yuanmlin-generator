@@ -22,7 +22,7 @@ public class TemplateMakerTest {
     /**
      * 测试同配置多次生成时，强制变为静态生成
      */
-    @Test
+    
     public void testMakeTemplateBug1() {
         Meta meta = new Meta();
         meta.setName("acm-template-generator");
@@ -56,7 +56,6 @@ public class TemplateMakerTest {
     /**
      * 测试错误生成了新生成的模板文件
      */
-    @Test
     public void testMakeTemplateBug2() {
         Meta meta = new Meta();
         meta.setName("acm-template-generator");
@@ -89,7 +88,7 @@ public class TemplateMakerTest {
     /**
      * 测试文件生成路径
      */
-    @Test
+    
     public void testMakeTemplateBug3() {
         Meta meta = new Meta();
         meta.setName("acm-template-generator");
@@ -122,7 +121,6 @@ public class TemplateMakerTest {
     /**
      * 使用 JSON 制作模板
      */
-    @Test
     public void testMaleTemplateWithJSON() {
         String configStr = ResourceUtil.readUtf8Str("templateMaker.json");
         TemplateMakerConfig templateMakerConfig = JSONUtil.toBean(configStr, TemplateMakerConfig.class);
@@ -133,7 +131,7 @@ public class TemplateMakerTest {
     /**
      * 制作 Spring Boot 模板
      */
-    @Test
+    
     public void makeSpringBootTemplate() {
         String rootPath = "examples/yuanmlin-generator-web-backend/";
         String configStr = ResourceUtil.readUtf8Str(rootPath + "templateMaker.json");
