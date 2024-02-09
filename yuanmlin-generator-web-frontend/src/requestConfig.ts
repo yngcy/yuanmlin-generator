@@ -45,6 +45,9 @@ export const requestConfig: RequestConfig = {
       if (requestPath.includes('download')) {
         return response;
       }
+      if (response.data instanceof Blob) {
+        return response;
+      }
 
       // 错误码处理
       const code: number = data.code;

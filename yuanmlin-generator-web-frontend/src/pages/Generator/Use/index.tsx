@@ -4,12 +4,27 @@ import FileConfig from '@/pages/Generator/Detail/compoents/FileConfig';
 import ModelConfig from '@/pages/Generator/Detail/compoents/ModelConfig';
 import {
   downloadGeneratorByIdUsingGet,
-  getGeneratorVoByIdUsingGet,
+  getGeneratorVoByIdUsingGet, useGeneratorUsingPost,
 } from '@/services/backend/generatorController';
 import { Link, useModel, useParams } from '@@/exports';
 import { DownloadOutlined, EditOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-components';
-import { Button, Card, Col, Image, message, Row, Space, Tabs, Tag, Typography } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Collapse,
+  Divider,
+  Form,
+  Image,
+  Input,
+  message,
+  Row,
+  Space,
+  Tabs,
+  Tag,
+  Typography
+} from 'antd';
 import { saveAs } from 'file-saver';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -20,12 +35,19 @@ import React, { useEffect, useState } from 'react';
  */
 const GeneratorDetail: React.FC = () => {
   const { id } = useParams();
+  const [form] = Form.useForm();
+
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<API.GeneratorVO>({});
   const { initialState } = useModel('@@initialState');
   const { currentUser } = initialState ?? {};
-  const my = data?.userId === currentUser?.id;
+  const [downloading, setDownloading] = useState<boolean>(false);
 
+  const models = data?.modelConfig?.models ?? [];
+
+  /**
+   * 加载数据
+   */
   const loadData = async () => {
     if (!id) {
       return;
@@ -63,34 +85,33 @@ const GeneratorDetail: React.FC = () => {
   };
 
   /**
-   * 下载按钮
+   * 生成按钮
    */
   const downloadButton = data.distPath && currentUser && (
     <Button
+      type={'primary'}
       icon={<DownloadOutlined />}
+      loading={downloading}
       onClick={async () => {
-        const blob = await downloadGeneratorByIdUsingGet(
-          // @ts-ignore
-          { id },
+        setDownloading(true);
+        const values = form.getFieldsValue();
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const blob = await useGeneratorUsingPost(
+          {
+            id: data.id,
+            dataModel: values,
+          },
           {
             responseType: 'blob',
           },
         );
-        const fullPath = COS_HOST + data.distPath;
+        const fullPath = data.distPath || '';
         saveAs(blob, fullPath.substring(fullPath.lastIndexOf('/') + 1));
+        setDownloading(false);
       }}
     >
-      下载
+      生成代码
     </Button>
-  );
-
-  /**
-   * 编辑按钮
-   */
-  const editButton = my && (
-    <Link to={`/generator/update?id=${data.id}`}>
-      <Button icon={<EditOutlined />}>编辑</Button>
-    </Link>
   );
 
   return (
@@ -103,51 +124,63 @@ const GeneratorDetail: React.FC = () => {
               {tagListView(data.tags)}
             </Space>
             <Typography.Paragraph>{data.description}</Typography.Paragraph>
-            <Typography.Paragraph type={'secondary'}>
-              创建时间：{moment(data.createTime).format('YYYY-MM-DD hh:mm:ss')}
-            </Typography.Paragraph>
-            <Typography.Paragraph type={'secondary'}>
-              基础包：{data?.basePackage}
-            </Typography.Paragraph>
-            <Typography.Paragraph type={'secondary'}>版本：{data.version}</Typography.Paragraph>
-            <Typography.Paragraph type={'secondary'}>作者：{data.author}</Typography.Paragraph>
+            <Divider />
+            <Form form={form}>
+              {models.map((model, index) => {
+                // 是分组
+                if (model.groupKey) {
+                  if (!model.models) {
+                    return <></>;
+                  }
+                  return (
+                    <Collapse
+                      key={index}
+                      style={{
+                        marginBottom: 24,
+                      }}
+                      items={[
+                        {
+                          key: index,
+                          label: model.groupName + '（分组）',
+                          children: model.models.map((subModel, iundex) => {
+                            return (
+                              <Form.Item
+                                key={index}
+                                label={subModel.fieldName}
+                                // @ts-ignore
+                                name={[model.groupKey, subModel.fieldName]}
+                                >
+                                <Input placeholder={subModel.description} />
+                              </Form.Item>
+                            )
+                          })
+                        }
+                      ]}
+                      bordered={false}
+                      defaultActiveKey={[index]}
+                      />
+                  )
+                }
+
+                return (
+                  <Form.Item key={index} label={model.fieldName} name={model.fieldName}>
+                    <Input placeholder={model.description} />
+                  </Form.Item>
+                )
+              })}
+            </Form>
             <div style={{ marginBottom: 24 }} />
             <Space size={'middle'}>
-              <Link to={`/generator/use/${id}`}>
-                <Button type={'primary'}>立即使用</Button>
-              </Link>
               {downloadButton}
-              {editButton}
+              <Link to={`/generator/detail/${id}`}>
+                <Button>查看详情</Button>
+              </Link>
             </Space>
           </Col>
           <Col flex={'320px'}>
             <Image src={data.picture} />
           </Col>
         </Row>
-      </Card>
-      <Card>
-        <Tabs
-          size={'large'}
-          defaultActiveKey={'fileConfig'}
-          onChange={() => {}}
-          items={[
-            {
-              key: 'fileConfig',
-              label: '文件配置',
-              children: <FileConfig data={data} />,
-            },
-            {
-              key: 'modelConfig',
-              label: '模型配置',
-              children: <ModelConfig data={data} />,
-            },
-            {
-              key: 'authorInfo',
-              label: '作者信息',
-              children: <AuthorInfo data={data} />,
-            },
-          ]}
-        />
       </Card>
     </PageContainer>
   );

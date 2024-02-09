@@ -3,15 +3,16 @@ package ${basePackage}.cli;
 import ${basePackage}.cli.command.ConfigCommand;
 import ${basePackage}.cli.command.GenerateCommand;
 import ${basePackage}.cli.command.ListCommand;
+import ${basePackage}.cli.command.JsonGenerateCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
 /**
-* @author ${author}
-* @description
-*/
+ * @author ${author}
+ * @description
+ */
 @Command(name = "${name}", mixinStandardHelpOptions = true)
-public class CommandExecutor implements Runnable{
+public class CommandExecutor implements Runnable {
 
     private final CommandLine commandLine;
 
@@ -19,7 +20,8 @@ public class CommandExecutor implements Runnable{
         commandLine = new CommandLine(this)
                 .addSubcommand(new GenerateCommand())
                 .addSubcommand(new ListCommand())
-                .addSubcommand(new ConfigCommand());
+                .addSubcommand(new ConfigCommand())
+                .addSubcommand(new JsonGenerateCommand());
     }
 
 
@@ -29,10 +31,11 @@ public class CommandExecutor implements Runnable{
     }
 
     /**
-      * 执行命令
-      * @param args
-      * @return
-      */
+     * 执行命令
+     *
+     * @param args
+     * @return
+     */
     public Integer doExecute(String[] args) {
         return commandLine.execute(args);
     }

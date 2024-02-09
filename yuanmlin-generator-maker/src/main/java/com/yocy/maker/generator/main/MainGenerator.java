@@ -77,7 +77,7 @@ public class MainGenerator extends GenerateTemplate {
 
         // cli.CommandExecutor
         inputFilePath = inputResourcePath + File.separator + "templates/java/cli/CommandExecutor.java.ftl";
-        outputFilePath = outputBaseJavaPackagePath + "/cli/CommandExecutor.java";
+        outputFilePath = outputBaseJavaPackagePath + "/cli/CommandExecutor.java.ftl";
         DynamicFileGenerator.doGenerate(inputFilePath, outputFilePath, meta);
 
         // Main

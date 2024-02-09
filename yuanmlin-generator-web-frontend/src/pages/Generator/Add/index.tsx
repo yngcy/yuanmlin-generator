@@ -18,6 +18,8 @@ import {
 } from '@ant-design/pro-components';
 import { message, UploadFile } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
+import ModelConfig from "@/pages/Generator/Detail/compoents/ModelConfig";
+import ModelConfigForm from "@/pages/Generator/Add/components/ModelConfigForm";
 
 /**
  * 创建/修改生成器页面
@@ -84,11 +86,14 @@ const GeneratorAdd: React.FC = () => {
     }
 
     if (id) {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       await doUpdate({
+        // @ts-ignore
         id,
         ...values,
       });
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
       await doAdd(values);
     }
   };
@@ -157,8 +162,15 @@ const GeneratorAdd: React.FC = () => {
           <StepsForm.StepForm name={'fileConfig'} title={'文件配置'}>
             {/*todo 待补充*/}
           </StepsForm.StepForm>
-          <StepsForm.StepForm name={'modelConfig'} title={'模型配置'}>
-            {/*todo 待补充*/}
+          <StepsForm.StepForm
+            name={'modelConfig'}
+            title={'模型配置'}
+            onFinish={async (values) => {
+              console.log(values);
+              return true;
+            }}
+          >
+            <ModelConfigForm formRef={formRef} oldData={oldData}/>
           </StepsForm.StepForm>
           <StepsForm.StepForm name={'dist'} title={'生成器文件'}>
             <ProFormItem label={'产物包'} name={'distPath'}>
