@@ -2,6 +2,9 @@ package com.yocy.web.mapper;
 
 import com.yocy.web.model.entity.Generator;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
 * @author YounGCY
@@ -11,6 +14,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface GeneratorMapper extends BaseMapper<Generator> {
 
+    @Select("SELECT id, distPath FROM generator WHERE isDelete = 1")
+    List<Generator> listDeletedGenerator();
 }
 
 

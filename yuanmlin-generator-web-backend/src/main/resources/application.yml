@@ -75,3 +75,16 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.yocy.web.controller
+# xxl-job 配置
+xxl:
+  job:
+    admin:
+      addresses: http://127.0.0.1:8080/xxl-job-admin
+    accessToken: default_token
+    executor:
+      appname: yuanmlin-generator-web-backend
+      address:
+      ip:
+      port: 9999
+      logpath: logs/jobhandler
+      logretentiondays: 30

@@ -1,14 +1,18 @@
 package com.yocy.web.manager;
 
+import cn.hutool.core.collection.CollUtil;
 import com.qcloud.cos.COSClient;
-import com.qcloud.cos.model.COSObject;
-import com.qcloud.cos.model.GetObjectRequest;
-import com.qcloud.cos.model.PutObjectRequest;
-import com.qcloud.cos.model.PutObjectResult;
+import com.qcloud.cos.exception.CosClientException;
+import com.qcloud.cos.exception.CosServiceException;
+import com.qcloud.cos.exception.MultiObjectDeleteException;
+import com.qcloud.cos.model.*;
 import com.qcloud.cos.transfer.Download;
 import com.qcloud.cos.transfer.TransferManager;
 import com.yocy.web.config.CosClientConfig;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.annotation.PostConstruct;
@@ -30,10 +34,10 @@ public class CosManager {
 
     @Resource
     private COSClient cosClient;
-    
+
     // 复用下载对象
     private TransferManager transferManager;
-    
+
     @PostConstruct
     public void init() {
         System.out.println("Bean 初始化成功");
@@ -41,7 +45,7 @@ public class CosManager {
         // 自定义线程池大小，建议在客户端与 COS 网络充足（例如使用腾讯云的 CVM，同地域上传 COS）的情况下，设置成16或32即可，可较充分的利用网络资源
         // 对于使用公网传输且网络带宽质量不高的情况，建议减小该值，避免因网速过慢，造成请求超时。
         ExecutorService threadPool = Executors.newFixedThreadPool(32);
-        
+
         // 传入一个 threadpool, 若不传入线程池，默认 TransferManager 中会生成一个单线程的线程池。
         transferManager = new TransferManager(cosClient, threadPool);
     }
@@ -49,7 +53,7 @@ public class CosManager {
     /**
      * 上传对象
      *
-     * @param key 唯一键
+     * @param key           唯一键
      * @param localFilePath 本地文件路径
      * @return
      */
@@ -62,7 +66,7 @@ public class CosManager {
     /**
      * 上传对象
      *
-     * @param key 唯一键
+     * @param key  唯一键
      * @param file 文件
      * @return
      */
@@ -75,6 +79,7 @@ public class CosManager {
 
     /**
      * 下载对象
+     *
      * @param key 唯一键
      * @return
      */
@@ -85,6 +90,7 @@ public class CosManager {
 
     /**
      * 下载对象到本地文件
+     *
      * @param key
      * @param localFilePath
      * @return
@@ -96,5 +102,89 @@ public class CosManager {
         Download download = transferManager.download(getObjectRequest, downloadFile);
         download.waitForCompletion();
         return download;
+    }
+
+    /**
+     * 删除对象
+     *
+     * @param key
+     * @throws CosClientException
+     * @throws CosServiceException
+     */
+    public void deleteObject(String key) throws CosClientException, CosServiceException {
+        cosClient.deleteObject(cosClientConfig.getBucket(), key);
+    }
+
+    /**
+     * 批量删除对象
+     *
+     * @param keyList
+     * @return
+     * @throws MultiObjectDeleteException
+     * @throws CosClientException
+     * @throws CosServiceException
+     */
+    public DeleteObjectsResult deleteObjects(List<String> keyList)
+            throws MultiObjectDeleteException, CosClientException, CosServiceException {
+        DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(cosClientConfig.getBucket());
+        // 设置要删除的key列表, 最多一次删除1000个
+        ArrayList<DeleteObjectsRequest.KeyVersion> keyVersions = new ArrayList<>();
+        // 传入要删除的文件名
+        // 注意文件名不允许以正斜线/或者反斜线\开头，例如：
+        // 存储桶目录下有a/b/c.txt文件，如果要删除，只能是 keyList.add(new KeyVersion("a/b/c.txt")), 若使用 keyList.add(new KeyVersion("/a/b/c.txt"))会导致删除不成功
+        for (String key : keyList) {
+            keyVersions.add(new DeleteObjectsRequest.KeyVersion(key));
+        }
+        deleteObjectsRequest.setKeys(keyVersions);
+        DeleteObjectsResult deleteObjectsResult = cosClient.deleteObjects(deleteObjectsRequest);
+        return deleteObjectsResult;
+    }
+
+    /**
+     * 删除目录
+     * 
+     * @param delPrefix
+     * @throws CosServiceException
+     * @throws CosServiceException
+     */
+    public void deleteDir(String delPrefix) throws CosServiceException, CosServiceException {
+        ListObjectsRequest listObjectsRequest = new ListObjectsRequest();
+        // 设置 bucket 名称
+        listObjectsRequest.setBucketName(cosClientConfig.getBucket());
+        // prefix 表示列出的对象名以 prefix 为前缀
+        // 这里填要列出的目录的相对 bucket 的路径
+        listObjectsRequest.setPrefix(delPrefix);
+        // 设置最大遍历出多少个对象, 一次 listobject 最大支持1000
+        listObjectsRequest.setMaxKeys(1000);
+
+        // 保存每次列出的结果
+        ObjectListing objectListing = null;
+        
+        do {
+            objectListing = cosClient.listObjects(listObjectsRequest);
+
+            // 这里保存列出的对象列表
+            List<COSObjectSummary> cosObjectSummaries = objectListing.getObjectSummaries();
+            if (CollUtil.isEmpty(cosObjectSummaries)) {
+                break;
+            }
+            
+            ArrayList<DeleteObjectsRequest.KeyVersion> delObjects = new ArrayList<>();
+
+
+            for (COSObjectSummary cosObjectSummary : cosObjectSummaries) {
+                delObjects.add(new DeleteObjectsRequest.KeyVersion(cosObjectSummary.getKey()));
+            }
+
+
+            DeleteObjectsRequest deleteObjectsRequest = new DeleteObjectsRequest(cosClientConfig.getBucket());
+            deleteObjectsRequest.setKeys(delObjects);
+            cosClient.deleteObjects(deleteObjectsRequest);
+
+            // 标记下一次开始的位置
+            String nextMarker = objectListing.getNextMarker();
+            listObjectsRequest.setMarker(nextMarker);
+        } while (objectListing.isTruncated());
+
     }
 }
