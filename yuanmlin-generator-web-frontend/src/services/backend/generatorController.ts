@@ -122,6 +122,21 @@ export async function listGeneratorVoByPageUsingPost(
   });
 }
 
+/** listGeneratorVOByPageFast POST /api/generator/list/page/vo/fast */
+export async function listGeneratorVoByPageFastUsingPost(
+  body: API.GeneratorQueryRequest,
+  options?: { [key: string]: any },
+) {
+  return request<API.BaseResponsePageGeneratorVO_>('/api/generator/list/page/vo/fast', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  });
+}
+
 /** makeGenerator POST /api/generator/make */
 export async function makeGeneratorUsingPost(
   body: API.GeneratorMakeRequest,
