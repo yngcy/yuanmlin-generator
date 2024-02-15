@@ -5,6 +5,7 @@ import freemarker.cache.ClassTemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -51,7 +52,7 @@ public class DynamicFileGenerator {
         if (!FileUtil.exist(outputPath)) {
             FileUtil.touch(outputPath);
         }
-
+        System.out.println("In DynamicFileGenerator.doGenerate, model : " + model);
         // 生成
         Writer out = new FileWriter(outputPath);
         template.process(model, out);

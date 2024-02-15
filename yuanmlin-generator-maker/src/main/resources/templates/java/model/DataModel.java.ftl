@@ -5,29 +5,29 @@ import lombok.Data;
 <#macro generateModel indent modelInfo>
 <#if modelInfo.description??>
 ${indent}/**
-${indent}  * ${modelInfo.description}
-${indent}  */    
+${indent} * ${modelInfo.description}
+${indent} */
 </#if>
-${indent}public ${modelInfo.type} ${modelInfo.fieldName}<#if modelInfo.defaultValue??> = ${modelInfo.defaultValue?c}</#if>; 
+${indent}public ${modelInfo.type} ${modelInfo.fieldName}<#if modelInfo.defaultValue??> = <#if modelInfo.type == "boolean">${modelInfo.defaultValue?lower_case}<#else>${modelInfo.defaultValue?c}</#if></#if>;
 </#macro>
 
 /**
-* 动态模板配置
+* 数据模型
 * @author ${author}
-* @description
 */
 @Data
 public class DataModel {
 <#list modelConfig.models as modelInfo>
+
     <#-- 有分组 -->
-    <#if modelInfo.groupName??>
+    <#if modelInfo.groupKey??>
     /**
      * ${modelInfo.groupName}
      */
     public ${modelInfo.type} ${modelInfo.groupKey} = new ${modelInfo.type}();
-    
+
     /**
-     * ${modelInfo.description}
+     * <#if modelInfo.description??>${modelInfo.description}</#if>
      */
      @Data
      public static class ${modelInfo.type} {
@@ -35,10 +35,10 @@ public class DataModel {
          <@generateModel indent="        " modelInfo=modelInfo />
      </#list>
      }
-        
-     <#else>
-     <#-- 无分组 -->
-     <@generateModel indent="    " modelInfo=modelInfo />
-     </#if>
+
+    <#else>
+    <#-- 无分组 -->
+    <@generateModel indent="    " modelInfo=modelInfo />
+    </#if>
 </#list>
 }

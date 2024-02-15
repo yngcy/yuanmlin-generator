@@ -1,7 +1,6 @@
 package com.yocy.maker;
 
 import com.yocy.maker.generator.main.GenerateTemplate;
-import com.yocy.maker.generator.main.MainGenerator;
 import com.yocy.maker.generator.main.ZipGenerator;
 import freemarker.template.TemplateException;
 

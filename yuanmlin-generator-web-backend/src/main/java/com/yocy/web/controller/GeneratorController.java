@@ -2,7 +2,6 @@ package com.yocy.web.controller;
 
 import cn.hutool.core.codec.Base64Encoder;
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -35,10 +34,7 @@ import com.yocy.web.service.GeneratorService;
 import com.yocy.web.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +51,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 帖子接口
@@ -76,9 +71,6 @@ public class GeneratorController {
     @Resource
     private CosManager cosManager;
 
-    @Resource
-    private StringRedisTemplate stringRedisTemplate;
-    
     @Resource
     private CacheManager cacheManager;
 
@@ -242,23 +234,23 @@ public class GeneratorController {
         long current = generatorQueryRequest.getCurrent();
         long size = generatorQueryRequest.getPageSize();
         String cacheKey = getPageCacheKey(generatorQueryRequest);
-        
+
         // 多级缓存
         Object cacheValue = cacheManager.get(cacheKey);
         if (cacheValue != null) {
             return ResultUtils.success((Page<GeneratorVO>) cacheValue);
         }
-        
+
         // 限制爬虫
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
         QueryWrapper<Generator> queryWrapper = generatorService.getQueryWrapper(generatorQueryRequest);
         queryWrapper.select("id", "name", "description", "tags", "picture", "status", "userId", "createTime", "updateTime");
         Page<Generator> generatorPage = generatorService.page(new Page<>(current, size), queryWrapper);
         Page<GeneratorVO> generatorVOPage = generatorService.getGeneratorVOPage(generatorPage, request);
-        
+
         // 写入缓存
         cacheManager.put(cacheKey, generatorVOPage);
-        
+
         return ResultUtils.success(generatorVOPage);
     }
 
@@ -467,13 +459,20 @@ public class GeneratorController {
 
         // 执行脚本
         // 找到脚本文件所在路径
+        // win
+//        File scriptFile = FileUtil.loopFiles(unzipDistDir, 2, null)
+//                .stream()
+//                .filter(file -> file.isFile()
+//                        && "generator.bat".equals(file.getName()))
+//                .findFirst()
+//                .orElseThrow(RuntimeException::new);
+        // other
         File scriptFile = FileUtil.loopFiles(unzipDistDir, 2, null)
                 .stream()
                 .filter(file -> file.isFile()
-                        && "generator.bat".equals(file.getName()))
+                        && "generator".equals(file.getName()))
                 .findFirst()
                 .orElseThrow(RuntimeException::new);
-
         // 添加可执行权限
         try {
             Set<PosixFilePermission> permissions = PosixFilePermissions.fromString("rwxrwxrwx");
@@ -483,8 +482,12 @@ public class GeneratorController {
         }
 
         File scriptDir = scriptFile.getParentFile();
+        // Win 系统
+//        String scriptAbsolutePath = scriptFile.getAbsolutePath().replace("\\", "/");
+//        String[] commands = new String[]{scriptAbsolutePath, "json-generate", "--file=" + dataModelFilePath};
+
         // 注意在 mac/linux 系统下为 ./generator
-        String scriptAbsolutePath = scriptFile.getAbsolutePath().replace("\\", "/");
+        String scriptAbsolutePath = scriptFile.getAbsolutePath();
         String[] commands = new String[]{scriptAbsolutePath, "json-generate", "--file=" + dataModelFilePath};
 
         // 这里一定要拆分
